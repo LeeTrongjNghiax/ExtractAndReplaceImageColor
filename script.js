@@ -218,7 +218,7 @@ document.querySelector("#sortColorRatio").addEventListener('click', e => {
 
 document.querySelector("#download").addEventListener('click', () => {
   drawImageFromArray(imagePixels2, ctxOutputHidden, cvOutputHidden.width / imagePixels.length);
-  document.querySelector("#ctxOutputHidden").style.display = "none";
+  document.querySelector("#cvOutputHidden").style.display = "none";
   let link = document.createElement('a');
   link.download = 'filename.png';
   link.href = document.querySelector('#cvOutputHidden').toDataURL();
