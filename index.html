@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Extract And Replace Image Color</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="container">
+    <!-- <h1>Extract And Replace Image Pixel Tool!</h1> -->
+    <div id="cvInputContainer">
+      <canvas id="cvInput" width="640" height="640"></canvas>
+      <canvas id="cvInputHidden" width="16" height="16"></canvas>
+      <img id="imgInput" src="" alt="">
+      <input type="file" name="inpCvInput" id="inpCvInput">
+    </div>
+    <div id="colorInfoContainer">
+      <table id="colorInfo">
+        <thead>
+          <tr>
+            <th>No.</th>
+            <th>Input Color</th>
+            <!-- <th>Color Name</th> -->
+            <th>Color Frequency (n)</th>
+            <th id="sortColorRatio">Color Frequency (f)</th>
+            <th>To</th>
+            <th>Output Color</th>
+          </tr>
+        </thead>
+        <tbody id="tbody">
+          <!-- <tr>
+            <td><p>0</p></td>
+            <td><input type="color"></td>
+            <td><div class="colorHex">#000000</div></td>
+            <td><div class="colorFrequencyN">0</div></td>
+            <td><div class="colorFrequencyF">0%</div></td>
+            <td><p>→</p></td>
+            <td><input type="color"></td>
+          </tr> -->
+        </tbody>
+      </table>
+    </div>
+    <div id="cvOutputContainer">
+      <canvas id="cvOutput" width="640" height="640"></canvas>
+      <canvas id="cvOutputHidden" width="16" height="16"  ></canvas>
+      <button id="download">Download Image</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
