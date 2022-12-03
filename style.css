@@ -1,5 +1,5 @@
 * {
-  font-size: 30px;
+  font-size: 20px;
   color: white;
   font-family: monospace;
   padding: 0;
@@ -31,7 +31,7 @@ h1 {
 }
 #colorInfoContainer {
   /* background-color: darkblue; */
-  width: 34%;
+  width: 40%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -47,14 +47,14 @@ h1 {
   justify-content: center;
 }
 #cvInput, #cvOutput {
-  border: 2px solid white;
+  border: 0.02rem solid white;
 }
 #colorInfo {
   width: 100%;
   background-color: #090909;
 }
 #colorInfo tbody tr td {
-  padding: 20px;
+  padding: 0.5rem;
   text-align: center;
 }
 #cvInput {
@@ -75,4 +75,45 @@ input[type=color] {
   width: 100%;
   border: none;
   background-color: black;
+}
+input[type=file] {
+  /* opacity: 0; */
+  /* position: absolute; */
+  /* z-index: -1; */
+  /* display: none; */
+}
+
+@media (max-width: 360px) {
+  * {
+    font-size: 12px;
+  }
+  html {
+    background-color: lightblue;
+  }
+  body {
+    width: 100%;
+  }
+  #container {
+    width: 100%;
+    flex-direction: column;
+  }
+  #cvInputContainer {
+    /* background-color: #606060; */
+    width: 100%;
+    order: 1;
+  }
+  #colorInfoContainer {
+    /* background-color: darkblue; */
+    width: 100%;
+    order: 3;
+  }
+  #cvOutputContainer {
+    /* background-color: #a0a0a0; */
+    width: 100%;
+    order: 2;
+  }
+  #colorInfo tbody tr td {
+    padding: 0.05rem;
+    text-align: center;
+  }
 }

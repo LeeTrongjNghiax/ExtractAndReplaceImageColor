@@ -160,17 +160,28 @@ addColorToUI = (index, color, color2, frequencyN, frequencyF) => {
   return tr;
 }
 
+let length = 320;
+
 let cvInput = document.querySelector("#cvInput");
+cvInput.width = length;
+cvInput.height = length;
+let ctxInput = cvInput.getContext("2d");
+
 let cvInputHidden = document.querySelector("#cvInputHidden");
 cvInputHidden.width = 16;
 cvInputHidden.height = 16;
-let ctxInput = cvInput.getContext("2d");
 let ctxInputHidden = cvInputHidden.getContext("2d");
 
 let cvOutput = document.querySelector("#cvOutput");
-let cvOutputHidden = document.querySelector("#cvOutputHidden");
+cvOutput.width = length;
+cvOutput.height = length;
 let ctxOutput = cvOutput.getContext("2d");
+
+let cvOutputHidden = document.querySelector("#cvOutputHidden");
+cvOutputHidden.width = 16;
+cvOutputHidden.height = 16;
 let ctxOutputHidden = cvOutputHidden.getContext("2d");
+
 let imagePixels;
 let imagePixels2;
 let frequencyArray;
@@ -196,9 +207,6 @@ document.querySelector("#imgInput").addEventListener('load', e => {
   
   frequencyArray = [...[].concat.apply([], imagePixels).reduce((acc, e) => acc.set(e, (acc.get(e) || 0) + 1), new Map()).entries()];
   frequencyArray2 = [...[].concat.apply([], imagePixels2).reduce((acc, e) => acc.set(e, (acc.get(e) || 0) + 1), new Map()).entries()];
-
-  console.log(frequencyArray);
-  console.log(frequencyArray2);
 
   document.querySelector("#cvInputHidden").style.display = "none";
   document.querySelector("#imgInput").style.display = "none";
