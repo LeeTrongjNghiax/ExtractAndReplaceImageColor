@@ -110,7 +110,7 @@ addColorToUI = (index, color, color2, frequencyN, frequencyF) => {
   let tr = document.createElement("tr");
   let tds = [];
 
-  for (let i = 0; i < 6; i++) 
+  for (let i = 0; i < 8; i++) 
     tds.push(document.createElement("td"));
 
   let no = document.createElement("p");
@@ -119,9 +119,14 @@ addColorToUI = (index, color, color2, frequencyN, frequencyF) => {
   let input = document.createElement("input");
   input.type = "color";
   input.setAttribute("value", color);
-  input.setAttribute("class", color + "Input");
+  // input.setAttribute("disabled", "");
   input.setAttribute("onmouseover", "showColor(this, ctxInput, imagePixels)");
   input.setAttribute("onmouseout", "backToInitImage(ctxInput, imagePixels)");
+
+  let buttonInput = document.createElement("button");
+  buttonInput.setAttribute("class", "green");
+  buttonInput.setAttribute("onclick", "showColor(this, ctxInput, imagePixels)");
+  buttonInput.appendChild( document.createTextNode("Show") )
 
   let colorHex = document.createElement("div");
   colorHex.setAttribute("class", "colorHex");
@@ -141,20 +146,30 @@ addColorToUI = (index, color, color2, frequencyN, frequencyF) => {
   let output = document.createElement("input");
   output.type = "color";
   output.setAttribute("value", color2);
-  output.setAttribute("class", color2 + "Output");
   output.setAttribute("onmouseover", "showColor(this, ctxOutput, imagePixels2)");
   output.setAttribute("onmouseout", "backToInitImage(ctxOutput, imagePixels2)") 
   output.setAttribute("onchange", "changeImage(this, ctxOutput, imagePixels)");
 
+  let buttonOutput = document.createElement("button");
+  buttonOutput.setAttribute("class", "green");
+  buttonOutput.setAttribute("onclick", "showColor(this, ctxInput, imagePixels)");
+  buttonOutput.appendChild( document.createTextNode("Show") )
+
+  let buttonUndo = document.createElement("button");
+  // buttonUndo.setAttribute("onclick", "showColor(this, ctxInput, imagePixels)");
+  buttonUndo.setAttribute("class", "orange");
+  buttonUndo.appendChild( document.createTextNode("Undo") )
+
   tds[0].appendChild( no );
   tds[1].appendChild( input );
-  // tds[2].appendChild( colorHex );
-  tds[2].appendChild( colorFrequencyN );
-  tds[3].appendChild( colorFrequencyF );
-  tds[4].appendChild( arrow );
+  tds[2].appendChild( buttonInput )
+  tds[3].appendChild( colorFrequencyN );
+  tds[4].appendChild( colorFrequencyF );
   tds[5].appendChild( output );
+  tds[6].appendChild( buttonOutput );
+  tds[7].appendChild( buttonUndo )
 
-  for (let i = 0; i < 6; i++)
+  for (let i = 0; i < 8; i++)
     tr.appendChild( tds[i] );
 
   return tr;
@@ -181,6 +196,8 @@ let cvOutputHidden = document.querySelector("#cvOutputHidden");
 cvOutputHidden.width = 16;
 cvOutputHidden.height = 16;
 let ctxOutputHidden = cvOutputHidden.getContext("2d");
+
+let tbody = document.querySelector("#tbody"); 
 
 let imagePixels;
 let imagePixels2;
@@ -231,4 +248,29 @@ document.querySelector("#download").addEventListener('click', () => {
   link.download = 'filename.png';
   link.href = document.querySelector('#cvOutputHidden').toDataURL();
   link.click();
+})
+
+
+document.querySelector("#changeTheme").addEventListener("click", (e) => {
+  let colorState = null;
+  if (document.querySelector("#changeTheme").getAttribute("data-state") == "dark") {
+    colorState = "Light";
+    document.querySelector("#changeTheme").removeAttribute("data-state");
+    document.querySelector("#changeTheme").setAttribute("data-state", "light");
+  } else {
+    colorState = "Dark";
+    document.querySelector("#changeTheme").removeAttribute("data-state");
+    document.querySelector("#changeTheme").setAttribute("data-state", "dark");
+  }
+  let colorStateOpp = colorState == "Light" ? "Dark" : "Light"
+
+  let allElements = document.getElementsByTagName("*");
+  for (let i = 0, len = allElements.length; i < len; i++) {
+    let element = allElements[i];
+    element.style.color = getComputedStyle(document.documentElement).getPropertyValue(`--textColor${colorStateOpp}`);
+    element.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue(`--backgroundColor${colorState}`);
+  }
+
+  document.querySelector("#cvInput").style.border = `0.02rem solid var(--textColor${colorStateOpp})`;
+  document.querySelector("#cvOutput").style.border = `0.02rem solid var(--textColor${colorStateOpp})`;
 })
