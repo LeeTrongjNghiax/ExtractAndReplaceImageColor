@@ -55,13 +55,25 @@ readImageToArray = (imagePixels, ctx) => {
   }
 }
 
+highlightPixel = (ctx, x, y, side) => {
+
+}
+
 drawImageFromArray = (imagePixels, ctx, side) => {
   // ctx.clearRect(0, 0, ctx.canvas.clientWidth, ctx.canvas.clientHeight);
   for (let i = 0; i < imagePixels.length; i++) {
     for (let j = 0; j < imagePixels[0].length; j++) {
-      if (imagePixels[i][j] != "none") {
+      if (imagePixels[i][j] != "none" && !imagePixels[i][j].includes("highlight")) {
         ctx.fillStyle = imagePixels[i][j];
         ctx.fillRect(side * i, side * j, side, side);
+      } else if (imagePixels[i][j].includes("highlight")) {
+        let buffer = side * 10 / 100;
+
+        ctx.fillStyle = document.querySelector("#colorInputSelector").value;
+        ctx.fillRect(side * i, side * j, side, side);
+        
+        ctx.fillStyle = imagePixels[i][j].substring(0, 7);
+        ctx.fillRect(buffer + side * i, buffer + side * j, side - buffer * 2, side - buffer * 2);
       }
     }
   }
@@ -72,13 +84,20 @@ showColor = (e, ctx, arr) => {
   let imagePixels2 = arr.map(row => {
     let row2 = row.map(v => {
       if (v.toLowerCase() === color.toLowerCase())
-        return "red";
+        if (e.getAttribute("data-io") == "input") 
+          return document.querySelector("#colorInputSelector").value;
+        else
+          return document.querySelector("#colorOutputSelector").value;
       else
         return v;
     })
     return row2;
   });
-  drawImageFromArray(imagePixels2, ctx, ctx.canvas.clientWidth / imagePixels2.length);
+  drawImageFromArray(
+    imagePixels2, 
+    ctx, 
+    ctx.canvas.clientWidth / imagePixels2.length
+  );
 }
 
 backToInitImage = (ctx, arr) => {
@@ -106,6 +125,20 @@ changeImage = (e, ctx, arr) => {
   frequencyArray2 = [...[].concat.apply([], imagePixels2).reduce((acc, e) => acc.set(e, (acc.get(e) || 0) + 1), new Map()).entries()];
 }
 
+showPixel = (e, ctx, arr) => {
+  // console.log(e.parentElement.parentElement.childNodes[1].childNodes[0].value);
+  let imagePixels3 = arr.map(row => {
+    let row2 = row.map(v => {
+      if (v.toLowerCase() == e.parentElement.parentElement.childNodes[1].childNodes[0].value)
+        return `${v}_highlight`
+      else 
+        return v;
+    })
+    return row2;
+  })
+  drawImageFromArray(imagePixels3, ctx, ctx.canvas.clientWidth / arr.length);
+}
+
 addColorToUI = (index, color, color2, frequencyN, frequencyF) => {
   let tr = document.createElement("tr");
   let tds = [];
@@ -119,13 +152,13 @@ addColorToUI = (index, color, color2, frequencyN, frequencyF) => {
   let input = document.createElement("input");
   input.type = "color";
   input.setAttribute("value", color);
-  // input.setAttribute("disabled", "");
+  input.setAttribute("data-io", "input");
   input.setAttribute("onmouseover", "showColor(this, ctxInput, imagePixels)");
   input.setAttribute("onmouseout", "backToInitImage(ctxInput, imagePixels)");
 
   let buttonInput = document.createElement("button");
   buttonInput.setAttribute("class", "green");
-  buttonInput.setAttribute("onclick", "showColor(this, ctxInput, imagePixels)");
+  buttonInput.setAttribute("onclick", "showPixel(this, ctxInput, imagePixels)");
   buttonInput.appendChild( document.createTextNode("Show") )
 
   let colorHex = document.createElement("div");
@@ -140,19 +173,17 @@ addColorToUI = (index, color, color2, frequencyN, frequencyF) => {
   colorFrequencyF.setAttribute("class", "colorFrequencyF");
   colorFrequencyF.innerHTML = frequencyF;
 
-  let arrow = document.createElement("p");
-  arrow.innerHTML = "→";
-
   let output = document.createElement("input");
   output.type = "color";
   output.setAttribute("value", color2);
+  output.setAttribute("data-io", "output");
   output.setAttribute("onmouseover", "showColor(this, ctxOutput, imagePixels2)");
   output.setAttribute("onmouseout", "backToInitImage(ctxOutput, imagePixels2)") 
   output.setAttribute("onchange", "changeImage(this, ctxOutput, imagePixels)");
 
   let buttonOutput = document.createElement("button");
   buttonOutput.setAttribute("class", "green");
-  buttonOutput.setAttribute("onclick", "showColor(this, ctxInput, imagePixels)");
+  buttonOutput.setAttribute("onclick", "showPixel(this, ctxOutput, imagePixels2)");
   buttonOutput.appendChild( document.createTextNode("Show") )
 
   let buttonUndo = document.createElement("button");
